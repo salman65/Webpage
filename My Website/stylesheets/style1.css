@@ -90,7 +90,7 @@ body{
 }
 
 .left_div .heading{
-	margin-left: 7.5%;
+	margin-left: 6.5%;
 	height: 28px; 
 }
 
@@ -126,7 +126,7 @@ body{
 }
 
 .right_sec .container{
-	padding-bottom: 10%;
+	padding-bottom: 15%;
 }
 
 .big_pic img{
@@ -139,27 +139,75 @@ body{
 	height: 28px;
 }
 
-.right_sec .footer{
-	padding-top: 6%;
-}
-
 .dot{
-	width: 10px;
-	height: 10px;
+	width: 15px;
+	height: 15px;
 	border-radius: 50%;
 	background-color: steelblue;
 }
 
 .ver_line{
 	width: 10px;
-	height: 100px;
-	border-radius: 20%;
-	background-color: silver;	
+	height: 132px;
+	border-radius: 10%;
+	background-color: silver;
+	margin-top: 15%;
+	margin-left: 8%;	
+}
+
+.hor_line1,.hor_line2,.hor_line3,.hor_line4,.hor_line5{
+	width: 280px;
+	height: 10px;
+	background-color: silver;
+}
+
+.hor_line1:after{
+	content: "";
+	width: 230px;
+	height: 10px;
+	background-color: steelblue;
+	position: absolute;
+}
+
+
+.hor_line2:after{
+	content: "";
+	width: 140px;
+	height: 10px;
+	background-color: steelblue;
+	position: absolute;
+}
+
+
+.hor_line3:after{
+	content: "";
+	width: 140px;
+	height: 10px;
+	background-color: steelblue;
+	position: absolute;
+}
+
+
+.hor_line4:after{
+	content: "";
+	width: 190px;
+	height: 10px;
+	background-color: steelblue;
+	position: absolute;
+}
+
+
+.hor_line5:after{
+	content: "";
+	width: 50px;
+	height: 10px;
+	background-color: steelblue;
+	position: absolute;
 }
 
 .date{
 	float: left;
-	width: 15%;
+	width: 20%;
 	clear: left;
 }
 
@@ -167,9 +215,80 @@ body{
 .division{
 	float: left;
 	width: 10%;
+	padding-top: 5%;
 }
 
 .info{
 	float: left;
 	width: 70%;
+	padding-top: 3.5%;
+	line-height: 16%;
+	padding-top: 5%;
+}
+
+.date p{
+	width: 50px;
+	height: 25px;
+	background: steelblue;
+	text-align: center;
+	position: relative;
+	line-height: 25px;
+}
+
+.date p:after{
+	content: "";
+	border-top: 12.5px solid transparent;
+	border-left: 15px solid steelblue;
+	border-bottom: 12.5px solid transparent;
+	position: absolute;
+	right: -15px;
+}
+
+.right_sec .content{
+	line-height: 135%;
+}
+
+.right_sec .footer{
+	padding-top: 8%;
+}
+
+.left_sec .footer{
+	clear: both;
+	padding-top: 2%;
+}
+
+.left_sec .footer .heading{
+	width:85%;
+	margin-left: 9%;
+}
+
+.circle img{
+	border-radius: 50%;
+	width: 50%;
+	height: 50%;
+}
+
+.icon img{
+	width: 10%;
+	height: 10%;
+	vertical-align: middle;
+	padding-right: 4%;
+}
+
+.footer .inline,.circle,.key{
+	display: inline-block;
+}
+
+.footer .inline{
+	margin-left: 10%;
+	margin-top: 2%;
+}
+
+.left_sec .footer .container{
+	padding-bottom: 15%;
+	line-height: 180%;
+}
+
+.footer li{
+	list-style-type: none;
 }
