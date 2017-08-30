@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>TimeZone Example</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="flipclock.css">
+
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+
+    <script src="jquery-3.2.1.min.js"></script>
+
+    <script src="flipclock.min.js"></script>
+
+    <style>
+      table {
+        margin-top: 20px;
+        border-collapse: collapse;
+      }
+      table th, table td {
+        border: 1px solid black;
+        padding-right: 25px;
+        padding-left: 25px;
+        text-align: center;
+      }
+      #add-button, #del_icon{
+        background-color: Transparent;
+        background-repeat:no-repeat;
+        border: none;
+        cursor:pointer;
+        overflow: hidden;
+        margin-left: 50px;
+        vertical-align: -6px;
+      }
+    </style>
+  </head>
+  <body>
+  
+    <div class="row align-items-center" style="height: 10em; background-color: lightgreen">
+      <h1 class="col-md-12" style="text-align: center;">My Time Calculator</h1>
+    </div>
+
+    <div style="margin-top: 4em; text-align: center;">
+      <label for="city">Enter City:</label>
+      <input type="text" name="city" id="city" />
+
+      <label for="gmt">Enter GMT (between -12 to 12):</label>
+      <input type="number" name="gmt" id="gmt" min="-12" max="12" />
+
+      <button class='fa fa-plus fa-2x' id="add-button"></button>
+    </div>
+
+    <table style="margin-top: 4em; margin-left: 30em;">
+      <tr>
+        <th>City</th>
+        <th>GMT</th>
+        <th>Time</th>
+      </tr>
+    </table>
+
+    <script>
+      var table=document.querySelector('table');
+      var city=document.querySelector('#city');
+      var gmt=document.querySelector('#gmt');
+      var button=document.querySelector('button');
+      city.focus();
+
+      if(sessionStorage.getItem('mytable')!==null){
+        var stored=JSON.parse(sessionStorage.getItem('mytable'));
+        for(var i=0;i<stored.length;i++){
+          insert_table(stored[i].city,stored[i].gmt);
+        }
+      }
+
+      button.onclick=function(){
+        var val1=city.value;
+        var val2=gmt.value;
+        city.value="";
+        gmt.value="";
+
+        if(Number(val2)>12 || Number(val2)<-12){
+          alert("GMT value not within required range!");
+        }
+        else if(val1==="" || val2===""){
+          alert("Please comlete the form!");
+        }
+        else{
+          insert_table(val1,val2);
+
+          var stored=JSON.parse(sessionStorage.getItem('mytable')) || [];
+          stored.push(new TableData(val1,val2));
+          sessionStorage.setItem('mytable',JSON.stringify(stored));
+        }
+        
+        city.focus();
+      }
+
+      function insert_table(val1, val2){
+        var tr=document.createElement('tr');
+        var td1=document.createElement('td');
+        var td2=document.createElement('td');
+        var td3=document.createElement('td');
+
+        var fclock=document.createElement('div');
+        td3.appendChild(fclock);
+
+        var del=document.createElement('button');
+        del.className='fa fa-trash fa-3x';
+        del.id='del_icon';
+        del.style.margin='30px';
+
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+        tr.appendChild(del);
+        
+        td1.textContent=val1;
+        td2.textContent=val2;
+        calcTime(val2,fclock);
+        table.appendChild(tr);
+
+        del.addEventListener('click',function() {
+          table.removeChild(tr);
+          sessionStorage.removeItem('mytable');
+          var stored=[];
+          for(var i=1, row ; row=table.rows[i] ; i++){
+            stored.push(new TableData(row.cells[0].innerHTML,row.cells[1].innerHTML));
+          }
+          sessionStorage.setItem('mytable',JSON.stringify(stored));
+        });
+      }
+
+      function calcTime(offset,fclock) {
+        var d = new Date();
+        var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+        var nd = new Date(utc + (3600000*offset));
+
+        clock = $(fclock).FlipClock(nd, {
+            clockFace: 'TwentyFourHourClock',
+        });
+      }
+
+      function TableData(city,gmt){
+        this.city= city;
+        this.gmt= gmt;
+      }
+    </script>
+  </body>
+</html>

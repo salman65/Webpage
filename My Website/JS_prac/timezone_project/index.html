@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>TimeZone Example</title>
+    <style>
+      table {
+        margin-top: 20px;
+        border-collapse: collapse;
+      }
+      table th, table td {
+        border: 1px solid black;
+        padding-right: 25px;
+        padding-left: 25px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+
+    <h1>My Time Calculator</h1>
+
+    <div>
+      <label for="city">Enter City:</label>
+      <input type="text" name="city" id="city" />
+
+      <label for="gmt">Enter GMT (between -12 to 12):</label>
+      <input type="number" name="gmt" id="gmt" min="-12" max="12" />
+
+      <button>Add item</button>
+    </div>
+
+    <table>
+      <tr>
+        <th>City</th>
+        <th>GMT</th>
+        <th>Time</th>
+      </tr>
+    </table>
+
+    <script>
+      var table=document.querySelector('table');
+      var city=document.querySelector('#city');
+      var gmt=document.querySelector('#gmt');
+      var button=document.querySelector('button');
+      city.focus();
+
+      if(sessionStorage.getItem('mytable')!==null){
+        var stored=JSON.parse(sessionStorage.getItem('mytable'));
+        for(var i=0;i<stored.length;i++){
+          insert_table(stored[i].city,stored[i].gmt);
+        }
+      }
+
+      button.onclick=function(){
+        var val1=city.value;
+        var val2=gmt.value;
+        city.value="";
+        gmt.value="";
+
+        if(Number(val2)>12 || Number(val2)<-12){
+          alert("GMT value not within required range!");
+        }
+        else if(val1==="" || val2===""){
+          alert("Please comlete the form!");
+        }
+        else{
+          insert_table(val1,val2);
+
+          var stored=JSON.parse(sessionStorage.getItem('mytable')) || [];
+          stored.push(new TableData(val1,val2));
+          sessionStorage.setItem('mytable',JSON.stringify(stored));
+        }
+        
+        city.focus();
+      }
+
+      function insert_table(val1, val2){
+        var tr=document.createElement('tr');
+        var td1=document.createElement('td');
+        var td2=document.createElement('td');
+        var td3=document.createElement('td');
+        var del=document.createElement('button');
+
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+        tr.appendChild(del);
+        del.textContent='Delete';
+        del.style.marginLeft="25px";
+
+        td1.textContent=val1;
+        td2.textContent=val2;
+        calcTime(val2,td3);
+        table.appendChild(tr);
+
+        del.addEventListener('click',function() {
+          table.removeChild(tr);
+          sessionStorage.removeItem('mytable');
+          var stored=[];
+          for(var i=1, row ; row=table.rows[i] ; i++){
+            stored.push(new TableData(row.cells[0].innerHTML,row.cells[1].innerHTML));
+          }
+          sessionStorage.setItem('mytable',JSON.stringify(stored));
+        });
+      }
+
+      function calcTime(offset,td3) {
+        var d = new Date();
+        var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+        var nd = new Date(utc + (3600000*offset));
+        var time = nd.toLocaleString();
+        td3.textContent=time.slice(time.indexOf(",")+2);
+        setTimeout(function() {
+          calcTime(offset,td3);
+        }, 1000);
+      }
+
+      function TableData(city,gmt){
+        this.city= city;
+        this.gmt= gmt;
+      }
+    </script>
+  </body>
+</html>
